@@ -38,7 +38,6 @@ public class MD5Util {
 			return hex(digest);
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println(e.toString());
 			return "";
 		}
 	}
