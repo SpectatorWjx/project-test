@@ -1,4 +1,4 @@
-package com.wjx.sjsr.system.filter;
+package com.wjx.sjsr.common.filter;
 
 import com.wjx.sjsr.utils.DateUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;

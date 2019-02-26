@@ -1,4 +1,4 @@
-package com.wjx.sjsr.system.vo;
+package com.wjx.sjsr.common.vo;
 
 import java.util.List;
 

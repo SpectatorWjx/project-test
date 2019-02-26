@@ -1,4 +1,4 @@
-package com.wjx.sjsr.system.enums;
+package com.wjx.sjsr.common.enums;
 
 
 /**

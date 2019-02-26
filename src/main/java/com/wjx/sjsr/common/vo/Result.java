@@ -1,7 +1,7 @@
-package com.wjx.sjsr.system.vo;
+package com.wjx.sjsr.common.vo;
 
 
-import com.wjx.sjsr.system.enums.ResultStatusCode;
+import com.wjx.sjsr.common.enums.ResultStatusCode;
 
 /**
  * 移动端api接口返回的数据模型

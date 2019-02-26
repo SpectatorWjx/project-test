@@ -1,4 +1,4 @@
-package com.wjx.sjsr.system.shiro;
+package com.wjx.sjsr.common.shiro;
 
 import com.wjx.sjsr.model.User;
 import com.alibaba.fastjson.JSON;

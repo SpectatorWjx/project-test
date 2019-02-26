@@ -1,6 +1,13 @@
-package com.wjx.sjsr.system.config;
+package com.wjx.sjsr.common.config;
 
+import com.wjx.sjsr.common.annotation.MyFirstAnnotation;
+import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.aop.Advisor;
 import org.springframework.aop.aspectj.AspectJExpressionPointcut;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
@@ -13,12 +20,16 @@ import org.springframework.transaction.interceptor.DefaultTransactionAttribute;
 import org.springframework.transaction.interceptor.NameMatchTransactionAttributeSource;
 import org.springframework.transaction.interceptor.TransactionInterceptor;
 
+import java.lang.reflect.Method;
+
+
 /**
  * @description 通过AOP切面设置全局事务，拦截service包下面所有方法
  * AOP术语：通知（Advice）、连接点（Joinpoint）、切入点（Pointcut)、切面（Aspect）、目标(Target)、代理(Proxy)、织入（Weaving）
  */
 @Aspect
 @Configuration
+@Slf4j
 public class TransactionAdviceConfig {
 
     private static final int TX_METHOD_TIMEOUT = 5;
@@ -85,5 +96,29 @@ public class TransactionAdviceConfig {
         pointcut.setExpression(AOP_POINTCUT_EXPRESSION);
         /*设置切面=切点pointcut+通知TxAdvice*/
         return new DefaultPointcutAdvisor(pointcut, txAdvice());
+    }
+
+    /**
+     * 自定义注解
+     */
+    @Pointcut("@annotation(com.wjx.sjsr.common.annotation.MyFirstAnnotation)")
+    public void annotationPointcut() {
+    }
+
+    @Before("annotationPointcut()")
+    public void beforePointcut(JoinPoint joinPoint) {
+        MethodSignature methodSignature =  (MethodSignature) joinPoint.getSignature();
+        Method method = methodSignature.getMethod();
+        MyFirstAnnotation annotation = method.getAnnotation(MyFirstAnnotation.class);
+        log.info("---------------- 执行"+annotation.value()+"----------------");
+    }
+
+    @After("annotationPointcut()")
+    public void afterPointcut(JoinPoint joinPoint) {
+        MethodSignature methodSignature =  (MethodSignature) joinPoint.getSignature();
+        Method method = methodSignature.getMethod();
+        MyFirstAnnotation annotation = method.getAnnotation(MyFirstAnnotation.class);
+        String value = annotation.value();
+        log.info("---------------- "+value+"成功----------------");
     }
 }

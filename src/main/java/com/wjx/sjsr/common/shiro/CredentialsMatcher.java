@@ -1,4 +1,4 @@
-package com.wjx.sjsr.system.shiro;
+package com.wjx.sjsr.common.shiro;
 
 import com.wjx.sjsr.utils.MD5Util;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -16,6 +16,6 @@ public class CredentialsMatcher extends SimpleCredentialsMatcher {
 		// 获得数据库中的密码
 		String dbPassword = (String) info.getCredentials();
 		// 进行密码的比对
-		return this.equals(MD5Util.encrypt(inPassword), dbPassword);
+		return MD5Util.getVerifyMD5(inPassword,dbPassword);
 	}
 }

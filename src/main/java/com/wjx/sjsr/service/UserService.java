@@ -2,7 +2,7 @@ package com.wjx.sjsr.service;
 
 import com.wjx.sjsr.dao.UserDAO;
 import com.wjx.sjsr.model.User;
-import com.wjx.sjsr.system.vo.Grid;
+import com.wjx.sjsr.common.vo.Grid;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.stereotype.Service;

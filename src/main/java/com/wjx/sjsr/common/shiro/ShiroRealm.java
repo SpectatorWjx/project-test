@@ -1,5 +1,6 @@
-package com.wjx.sjsr.system.shiro;
+package com.wjx.sjsr.common.shiro;
 
+import com.wjx.sjsr.common.annotation.MyFirstAnnotation;
 import com.wjx.sjsr.model.Menu;
 import com.wjx.sjsr.model.Role;
 import com.wjx.sjsr.model.User;
@@ -32,7 +33,6 @@ public class ShiroRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authcToken) throws AuthenticationException {
-        log.info("---------------- 执行 Shiro 凭证认证 ----------------------");
         UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
         String name = token.getUsername();
         // 从数据库获取对应用户名密码的用户
@@ -42,7 +42,6 @@ public class ShiroRealm extends AuthorizingRealm {
             if (!user.getDelFlag().equals("0")) {
                 throw new DisabledAccountException();
             }
-            log.info("---------------- Shiro 凭证认证成功 ----------------------");
             SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
                     user, //用户
                     user.getPassword(), //密码
@@ -58,7 +57,6 @@ public class ShiroRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        log.info("---------------- 执行 Shiro 权限获取 ---------------------");
         Object principal = principals.getPrimaryPrincipal();
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         if (principal instanceof User) {
@@ -81,9 +79,7 @@ public class ShiroRealm extends AuthorizingRealm {
                 }
             }
         }
-        log.info("---------------- 获取到以下权限 ----------------");
         log.info(info.getStringPermissions().toString());
-        log.info("---------------- Shiro 权限获取成功 ----------------------");
         return info;
     }
 }

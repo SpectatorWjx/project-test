@@ -1,7 +1,7 @@
 package com.wjx.sjsr.controller;
 
-import com.wjx.sjsr.system.enums.ResultStatusCode;
-import com.wjx.sjsr.system.vo.Result;
+import com.wjx.sjsr.common.enums.ResultStatusCode;
+import com.wjx.sjsr.common.vo.Result;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

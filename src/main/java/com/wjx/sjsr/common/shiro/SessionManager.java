@@ -1,4 +1,4 @@
-package com.wjx.sjsr.system.shiro;
+package com.wjx.sjsr.common.shiro;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.session.Session;

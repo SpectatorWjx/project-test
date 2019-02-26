@@ -1,7 +1,7 @@
-package com.wjx.sjsr.system.handler;
+package com.wjx.sjsr.common.handler;
 
-import com.wjx.sjsr.system.enums.ResultStatusCode;
-import com.wjx.sjsr.system.vo.Result;
+import com.wjx.sjsr.common.enums.ResultStatusCode;
+import com.wjx.sjsr.common.vo.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.http.HttpStatus;

@@ -4,7 +4,7 @@
     <contextName>logback-demo</contextName>
 
     <property name="logback.logdir" value="./log"/>
-    <property name="logback.appname" value="springboot"/>
+    <property name="logback.appname" value="sjsr"/>
 
     <!-- 彩色日志 -->
     <!-- 彩色日志依赖的渲染类 -->
@@ -170,5 +170,5 @@
     <!-- FrameworkServlet日志-->
     <logger name="org.springframework" level="WARN" />
     <!-- 打印sql语句 -->
-    <logger name="com.alex.springboot.dao" level="DEBUG"/>
+    <logger name="com.alex.sjsr.dao" level="DEBUG"/>
 </configuration>

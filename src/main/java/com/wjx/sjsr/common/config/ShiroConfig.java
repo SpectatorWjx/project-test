@@ -1,9 +1,9 @@
-package com.wjx.sjsr.system.config;
+package com.wjx.sjsr.common.config;
 
-import com.wjx.sjsr.system.shiro.CredentialsMatcher;
-import com.wjx.sjsr.system.shiro.SessionControlFilter;
-import com.wjx.sjsr.system.shiro.SessionManager;
-import com.wjx.sjsr.system.shiro.ShiroRealm;
+import com.wjx.sjsr.common.shiro.CredentialsMatcher;
+import com.wjx.sjsr.common.shiro.SessionControlFilter;
+import com.wjx.sjsr.common.shiro.SessionManager;
+import com.wjx.sjsr.common.shiro.ShiroRealm;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;

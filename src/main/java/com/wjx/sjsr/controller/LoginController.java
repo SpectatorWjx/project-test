@@ -1,7 +1,8 @@
 package com.wjx.sjsr.controller;
 
-import com.wjx.sjsr.system.enums.ResultStatusCode;
-import com.wjx.sjsr.system.vo.Result;
+import com.wjx.sjsr.common.annotation.MyFirstAnnotation;
+import com.wjx.sjsr.common.enums.ResultStatusCode;
+import com.wjx.sjsr.common.vo.Result;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.shiro.SecurityUtils;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/admin")
 public class LoginController {
 
+
+    @MyFirstAnnotation("登录认证")
     @RequestMapping("/login")
     public Result login(String loginName, String pwd){
         try {
