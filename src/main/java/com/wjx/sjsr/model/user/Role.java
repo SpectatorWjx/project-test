@@ -1,5 +1,6 @@
-package com.wjx.sjsr.model;
+package com.wjx.sjsr.model.user;
 
+import com.wjx.sjsr.model.AbstractEntity;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -10,11 +11,12 @@ import java.util.Date;
  * @author 
  */
 @Data
-public class Role implements Serializable {
+public class Role extends AbstractEntity {
+
     /**
      * 编号
      */
-    private Integer id;
+    public Integer id;
 
     /**
      * 角色名称
@@ -32,7 +34,5 @@ public class Role implements Serializable {
      * 是否可用
      */
     private Integer useable;
-
-    private static final long serialVersionUID = 1L;
 
 }

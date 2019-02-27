@@ -1,12 +1,15 @@
-package com.wjx.sjsr.dao;
+package com.wjx.sjsr.dao.user;
 
-import com.wjx.sjsr.model.Menu;
+import com.wjx.sjsr.dao.MyBatisBaseDao;
+import com.wjx.sjsr.model.user.Menu;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 /**
  * MenuDAO继承基类
  */
+@Component
 public interface MenuDAO extends MyBatisBaseDao<Menu, Integer> {
 
     /**

@@ -1,10 +1,13 @@
-package com.wjx.sjsr.dao;
+package com.wjx.sjsr.dao.user;
 
-import com.wjx.sjsr.model.User;
+import com.wjx.sjsr.dao.MyBatisBaseDao;
+import com.wjx.sjsr.model.user.User;
+import org.springframework.stereotype.Component;
 
 /**
  * UserDAO继承基类
  */
+@Component
 public interface UserDAO extends MyBatisBaseDao<User, Integer> {
 
     /**

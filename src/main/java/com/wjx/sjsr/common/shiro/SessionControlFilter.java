@@ -1,6 +1,6 @@
 package com.wjx.sjsr.common.shiro;
 
-import com.wjx.sjsr.model.User;
+import com.wjx.sjsr.model.user.User;
 import com.alibaba.fastjson.JSON;
 import lombok.Getter;
 import lombok.Setter;

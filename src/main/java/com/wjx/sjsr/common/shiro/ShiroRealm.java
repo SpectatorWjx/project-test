@@ -1,12 +1,11 @@
 package com.wjx.sjsr.common.shiro;
 
-import com.wjx.sjsr.common.annotation.MyFirstAnnotation;
-import com.wjx.sjsr.model.Menu;
-import com.wjx.sjsr.model.Role;
-import com.wjx.sjsr.model.User;
-import com.wjx.sjsr.service.MenuService;
-import com.wjx.sjsr.service.RoleService;
-import com.wjx.sjsr.service.UserService;
+import com.wjx.sjsr.model.user.Menu;
+import com.wjx.sjsr.model.user.Role;
+import com.wjx.sjsr.model.user.User;
+import com.wjx.sjsr.service.user.MenuService;
+import com.wjx.sjsr.service.user.RoleService;
+import com.wjx.sjsr.service.user.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;

@@ -1,5 +1,6 @@
-package com.wjx.sjsr.model;
+package com.wjx.sjsr.model.user;
 
+import com.wjx.sjsr.model.AbstractEntity;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -10,11 +11,12 @@ import java.util.Date;
  * @author 
  */
 @Data
-public class User implements Serializable {
+public class User extends AbstractEntity {
+
     /**
      * 编号
      */
-    private Integer id;
+    public Integer id;
 
     /**
      * 登录名
@@ -52,7 +54,5 @@ public class User implements Serializable {
      * 删除标记
      */
     private String delFlag;
-
-    private static final long serialVersionUID = 1L;
 
 }

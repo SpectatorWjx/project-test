@@ -1,8 +1,7 @@
-package com.wjx.sjsr.controller;
+package com.wjx.sjsr.controller.user;
 
-import com.wjx.sjsr.common.annotation.MyFirstAnnotation;
-import com.wjx.sjsr.service.UserService;
 import com.wjx.sjsr.common.vo.Grid;
+import com.wjx.sjsr.service.user.UserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,10 +20,5 @@ public class UserController {
         return userService.findList();
     }
 
-    @RequestMapping(value = "/say")
-    public String sayHello() {
-        System.out.println("吃饭");
-        return "hello spring boot";
-    }
 
 }

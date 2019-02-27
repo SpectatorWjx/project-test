@@ -119,6 +119,6 @@ public class TransactionAdviceConfig {
         Method method = methodSignature.getMethod();
         MyFirstAnnotation annotation = method.getAnnotation(MyFirstAnnotation.class);
         String value = annotation.value();
-        log.info("---------------- "+value+"成功----------------");
+        log.info("---------------- "+value+"结束----------------");
     }
 }

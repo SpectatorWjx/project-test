@@ -1,5 +1,6 @@
-package com.wjx.sjsr.model;
+package com.wjx.sjsr.model.user;
 
+import com.wjx.sjsr.model.AbstractEntity;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -10,11 +11,12 @@ import java.util.Date;
  * @author 
  */
 @Data
-public class Menu implements Serializable {
+public class Menu extends AbstractEntity {
+
     /**
      * 编号
      */
-    private Integer id;
+    public Integer id;
 
     /**
      * 名称
@@ -26,7 +28,5 @@ public class Menu implements Serializable {
      * 权限标识
      */
     private String permission;
-
-    private static final long serialVersionUID = 1L;
 
 }
