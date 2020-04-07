@@ -14,11 +14,6 @@ import java.util.Date;
 public class User extends AbstractEntity {
 
     /**
-     * 编号
-     */
-    public Integer id;
-
-    /**
      * 登录名
      */
     private String loginName;
@@ -49,10 +44,5 @@ public class User extends AbstractEntity {
      * 备注信息
      */
     private String remarks;
-
-    /**
-     * 删除标记
-     */
-    private String delFlag;
 
 }

@@ -14,6 +14,16 @@ public class CommonController {
      * 未授权跳转方法
      * @return
      */
+    @RequestMapping("/login")
+    public Result login(){
+        SecurityUtils.getSubject().logout();
+        return new Result(ResultStatusCode.NO_LOGIN);
+    }
+
+    /**
+     * 未授权跳转方法
+     * @return
+     */
     @RequestMapping("/unauth")
     public Result unauth(){
         SecurityUtils.getSubject().logout();

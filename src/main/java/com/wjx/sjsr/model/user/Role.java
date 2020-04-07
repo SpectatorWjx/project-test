@@ -14,11 +14,6 @@ import java.util.Date;
 public class Role extends AbstractEntity {
 
     /**
-     * 编号
-     */
-    public Integer id;
-
-    /**
      * 角色名称
      */
     private String name;

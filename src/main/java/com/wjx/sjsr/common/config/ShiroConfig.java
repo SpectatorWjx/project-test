@@ -34,12 +34,15 @@ public class ShiroConfig {
     @Value("${spring.redis.password}")
     private String redisPassword;
 
+    @Value("${spring.redis.database}")
+    private String redisDatabase;
+
     @Bean
     public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         // 没有登陆的用户只能访问登陆页面，前后端分离中登录界面跳转应由前端路由控制，后台仅返回json数据
-        shiroFilterFactoryBean.setLoginUrl("/common/unauth");
+        shiroFilterFactoryBean.setLoginUrl("/common/login");
         // 登录成功后要跳转的链接
         //shiroFilterFactoryBean.setSuccessUrl("/auth/index");
         // 未授权界面;
@@ -58,10 +61,16 @@ public class ShiroConfig {
         // 静态资源
         filterChainDefinitionMap.put("/static/**", "anon");
         // 登录方法
-        filterChainDefinitionMap.put("/admin/login*", "anon"); // 表示可以匿名访问
+        filterChainDefinitionMap.put("/admin/login*", "anon");
+
+        // 二维码
+        filterChainDefinitionMap.put("/Qrcode/create", "anon");
+
+        // test
+        filterChainDefinitionMap.put("/test/*", "anon");
 
         //此处需要添加一个kickout，上面添加的自定义拦截器才能生效
-        filterChainDefinitionMap.put("/admin/**", "authc,kickout");// 表示需要认证才可以访问
+        filterChainDefinitionMap.put("/**", "authc,kickout");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
     }
@@ -148,10 +157,11 @@ public class ShiroConfig {
      */
     public RedisManager redisManager() {
         RedisManager redisManager = new RedisManager();
-        redisManager.setHost(redisHost);
-        redisManager.setPort(redisPort);
-        redisManager.setTimeout(1800); //设置过期时间
+        redisManager.setHost(redisHost+":"+redisPort);
+        //设置过期时间
+        redisManager.setTimeout(1800);
         redisManager.setPassword(redisPassword);
+        redisManager.setDatabase(Integer.valueOf(redisDatabase));
         return redisManager;
     }
 

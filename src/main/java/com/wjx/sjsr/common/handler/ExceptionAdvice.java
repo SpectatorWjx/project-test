@@ -3,6 +3,7 @@ package com.wjx.sjsr.common.handler;
 import com.wjx.sjsr.common.enums.ResultStatusCode;
 import com.wjx.sjsr.common.vo.Result;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -55,6 +56,31 @@ public class ExceptionAdvice {
         log.error(e.getMessage(), e);
 
         return new Result(ResultStatusCode.UNAUTHO_ERROR);
+    }
+
+    /**
+     * 未登录
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(AuthorizationException.class)
+    public Result handleAuthorizationException(AuthorizationException e){
+        log.error(e.getMessage(), e);
+
+        return new Result(ResultStatusCode.NO_LOGIN);
+    }
+
+    /**
+     * 500
+     * @param e
+     * @return
+     */
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(RuntimeException.class)
+    public Result runtimeException(Exception e) {
+        e.printStackTrace();
+        log.error("运行时异常", e);
+        return new Result(ResultStatusCode.REQUEST_ERR, e.getMessage());
     }
 
     /**

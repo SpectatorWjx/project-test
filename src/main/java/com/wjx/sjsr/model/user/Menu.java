@@ -14,11 +14,6 @@ import java.util.Date;
 public class Menu extends AbstractEntity {
 
     /**
-     * 编号
-     */
-    public Integer id;
-
-    /**
      * 名称
      */
     private String name;

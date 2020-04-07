@@ -14,7 +14,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequiresPermissions("sys:user:view")
+    @RequiresPermissions("INDEX")
     @RequestMapping("/findList")
     public Grid findList(){
         return userService.findList();

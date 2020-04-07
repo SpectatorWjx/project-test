@@ -38,13 +38,13 @@ public class ShiroRealm extends AuthorizingRealm {
         User user = userService.getUserByName(name);
         if (user != null) {
             // 用户为禁用状态
-            if (!user.getDelFlag().equals("0")) {
+            if (user.getDelFlag() != 0) {
                 throw new DisabledAccountException();
             }
             SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
-                    user, //用户
-                    user.getPassword(), //密码
-                    getName()  //realm name
+                    user,
+                    user.getPassword(),
+                    getName()
             );
             return authenticationInfo;
         }

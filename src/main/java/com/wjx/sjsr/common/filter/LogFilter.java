@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -16,6 +17,7 @@ import java.util.Map;
 
 /**
  * 日志过滤器
+ * @author 86186
  */
 @Slf4j
 @Aspect
@@ -28,7 +30,7 @@ public class LogFilter {
 
     private long endTimeMillis;
 
-    @Pointcut("execution(* com.alex.springboot.controller.*.*(..))")
+    @Pointcut("execution(* com.wjx.sjsr.controller.*.*(..))")
     public void controller() {
     }
 
@@ -91,7 +93,8 @@ public class LogFilter {
             }
         }
 
-        if (buf.length() > 0)
-            log.info("{}:\n{}", new Object[] { prefix, buf.substring(0, buf.length() - 1) });
+        if (buf.length() > 0) {
+            log.info("{}:\n{}", new Object[]{prefix, buf.substring(0, buf.length() - 1)});
+        }
     }
 }
