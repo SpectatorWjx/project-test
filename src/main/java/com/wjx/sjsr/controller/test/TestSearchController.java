@@ -7,6 +7,7 @@ import com.wjx.sjsr.service.test.TestSearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
@@ -29,6 +30,12 @@ public class TestSearchController {
     public Result getLike(String kw){
         List<TestSearchEntity> list = testSearchService.findByLikeKeyWord(kw);
         return new Result(ResultStatusCode.OK,list);
+    }
+
+    @ResponseBody
+    @RequestMapping("/transaction")
+    public Result transactionTest(@RequestParam String id){
+        return testSearchService.updateById(id);
     }
 
     @ResponseBody

@@ -1,17 +1,21 @@
 package com.wjx.sjsr.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.DataType;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.Cursor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations.TypedTuple;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -24,12 +28,17 @@ import java.util.concurrent.TimeUnit;
  * @description: redis工具类
  */
 @Component
+@Slf4j
 public class RedisUtil {
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
     public RedisUtil(){
+
     }
 
     //切换数据库
@@ -53,6 +62,48 @@ public class RedisUtil {
 
     /**
      * 加锁
+     * @param key
+     * @param value 当前时间+超时时间
+     * @return
+     */
+    public boolean lock(String key, String value) {
+        if (stringRedisTemplate.opsForValue().setIfAbsent(key, value)) {
+            return true;
+        }
+        //currentValue=A 这两个线程的value都是B 其中一个线程拿到锁
+        String currentValue = stringRedisTemplate.opsForValue().get(key);
+        //如果锁过期
+        if (!StringUtils.isEmpty(currentValue) && Long.parseLong(currentValue) < System.currentTimeMillis()) {
+            //获取上一个锁的时间
+            String oldValue = stringRedisTemplate.opsForValue().getAndSet(key, value);
+            if (!StringUtils.isEmpty(oldValue) && oldValue.equals(currentValue)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 解锁
+     * @param key
+     * @param value
+     * @return
+     */
+    public void unlock(String key, String value) {
+        String currentVaule = stringRedisTemplate.opsForValue().get(key);
+        try {
+            if (!StringUtils.isEmpty(currentVaule) && currentVaule.equals(value)) {
+                stringRedisTemplate.opsForValue().getOperations().delete(key);
+            }
+        } catch (Exception e) {
+            log.error("【redis分布式锁】解锁异常，{}" , e);
+        }
+
+    }
+
+
+    /**
+     * 加锁
      */
     public boolean setLock(String lockKey, String lockName, long expireTime){
         return stringRedisTemplate.opsForValue()
@@ -67,152 +118,20 @@ public class RedisUtil {
     }
 
 
-    /** --------------------------------------------- token --------------------------------------------------**/
-    /**
-     * 判断key下是否有值
-     *
-     * @param key 判断的key
-     */
-    public Boolean hasToken(String key) {
-        return stringRedisTemplate.opsForHash().getOperations().hasKey("token:" + key);
+    /** --------------------------------------------- seckill --------------------------------------------------**/
+    public Object getCache(String key, String productId){
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        return redisTemplate.boundHashOps(key).get(productId);
     }
 
-
-    /**
-     * 判断此token是否在黑名单中
-     * @param token
-     * @return
-     */
-    public Boolean isBlackList(String token){
-        return hasKey("blacklist", token);
+    public void setCache(String key, String productId, Object object){
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.boundHashOps(key).put(productId, object);
+        redisTemplate.expire(key, 60*2, TimeUnit.SECONDS);
     }
 
-    /**
-     * 将token加入到redis黑名单中
-     * @param token
-     */
-    public void addBlackList(String token){
-        hset("blacklist", token,"true");
-    }
-
-
-    /**
-     * 查询token下的刷新时间
-     *
-     * @param token 查询的key
-     * @return HV
-     */
-    public Object getTokenValidTimeByToken(String token) {
-        return stringRedisTemplate.opsForHash().get("token:" + token, "tokenValidTime");
-    }
-
-    /**
-     * 查询token下的username
-     *
-     * @param token 查询的key
-     * @return HV
-     */
-    public Object getUsernameByToken(String token) {
-        return stringRedisTemplate.opsForHash().get("token:" + token, "username");
-    }
-
-    /**
-     * 查询token下clientId
-     *
-     * @param token 查询的key
-     * @return HV
-     */
-    public Object getClientByToken(String token) {
-        return stringRedisTemplate.opsForHash().get("token:" + token, "clientId");
-    }
-
-    /**
-     * 查询token下userId
-     *
-     * @param token 查询的key
-     * @return HV
-     */
-    public Object getUserIdByToken(String token) {
-        return stringRedisTemplate.opsForHash().get("token:" + token, "userId");
-    }
-
-    /**
-     * 查询token下的过期时间
-     *
-     * @param token 查询的key
-     * @return HV
-     */
-    public Object getExpirationTimeByToken(String token) {
-        return stringRedisTemplate.opsForHash().get("token:" + token, "expirationTime");
-    }
-
-    /**
-     * 设置token
-     * @param token
-     * @param username
-     * @param clientId
-     */
-    public void setTokenRefresh(String token, String username, String clientId, String userId, Integer tokenValidTime, Integer tokenExpirationSeconds){
-        hset("token:" + token, "tokenValidTime", DateUtil.getAddDaySecond(tokenValidTime), tokenValidTime);
-        hset("token:" + token, "expirationTime", DateUtil.getAddDaySecond(tokenExpirationSeconds), tokenValidTime);
-        hset("token:" + token, "username", username, tokenValidTime);
-        hset("token:" + token, "clientId", clientId, tokenValidTime);
-        hset("token:" + token, "userId", userId, tokenValidTime);
-    }
-
-    /**
-     * 删除token
-     *
-     * @param key 查询的key
-     */
-    public void deleteToken(String key) {
-        stringRedisTemplate.opsForHash().getOperations().delete("token:" + key);
-    }
-
-
-    /**-----------------------------------------档案token--------------------------------------------**/
-
-    /**
-     * 设置token
-     * @param token
-     * @param phone
-     * @param clientId
-     */
-    public void setArchivesToken(String token, String phone, String clientId, String userId, Integer tokenValidTime){
-
-        hset("archives_token:" + token, "tokenValidTime", DateUtil.getAddDaySecond(tokenValidTime), tokenValidTime);
-        hset("archives_token:" + token, "phone", phone, tokenValidTime);
-        hset("archives_token:" + token, "clientId", clientId, tokenValidTime);
-        hset("archives_token:" + token, "userId", userId, tokenValidTime);
-    }
-
-    /**
-     * 查询token下clientId
-     *
-     * @param archivesToken 查询的key
-     * @return HV
-     */
-    public Object getClientByArchivesToken(String archivesToken) {
-        return stringRedisTemplate.opsForHash().get("archives_token:" + archivesToken, "clientId");
-    }
-
-    /**
-     * 查询token下userId
-     *
-     * @param archivesToken 查询的key
-     * @return HV
-     */
-    public Object getUserIdByArchivesToken(String archivesToken) {
-        return stringRedisTemplate.opsForHash().get("archives_token:" + archivesToken, "userId");
-    }
-
-    /**
-     * 删除token
-     *
-     * @param key 查询的key
-     */
-    public void deleteArchivesToken(String key) {
-        stringRedisTemplate.opsForHash().getOperations().delete("archives_token:" + key);
+    public void delCache(String key, String productId){
+        redisTemplate.boundHashOps(key).delete(productId);
     }
 
 
@@ -260,50 +179,6 @@ public class RedisUtil {
      */
     public void deleteLoginSms(String key) {
         stringRedisTemplate.opsForHash().getOperations().delete("login_sms:" + key);
-    }
-
-    /**—————————————————— 档案密码验证码 ————————————————————**/
-    /**
-     *  档案密码验证码发送成功
-     * @param expire 过期时间（毫秒计）
-     * @param key
-     * */
-    public void setArchivesPwdSms(String key, String value, Integer expire, Integer sendInterval){
-        set("archives_pwd_sms:" + key,value, expire);//缓存验证码
-        Long count = stringRedisTemplate.opsForValue().increment("phone_sms_count:" + key,1);
-        if(count==1){
-            // 验证码次数凌晨清除
-            Duration duration = Duration.between(LocalDateTime.now(), LocalDate.now().plusDays(1).atTime(0,0,0));
-            expire( "phone_sms_count:" + key, duration.toMinutes(), TimeUnit.MINUTES);
-        }
-
-        set("just_send_sms_phone:" + key, new Date().toString(), sendInterval);
-
-    }
-
-    /**
-     * 获取档案密码验证码
-     * @param key
-     * */
-    public Object getArchivesPwdSms(String key){
-        return stringRedisTemplate.opsForValue().get("archives_pwd_sms:" + key);
-    }
-
-    /**
-     * 判断档案密码验证码是否存在
-     *
-     * @param key 判断的key
-     */
-    public Boolean hasArchivesPwdSms(String key) {
-        return stringRedisTemplate.opsForHash().getOperations().hasKey("archives_pwd_sms:" + key);
-    }
-    /**
-     * 删除档案密码验证码
-     *
-     * @param key 查询的key
-     */
-    public void deleteArchivesPwdSms(String key) {
-        stringRedisTemplate.opsForHash().getOperations().delete("archives_pwd_sms:" + key);
     }
 
 

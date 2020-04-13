@@ -4,9 +4,9 @@ server:
 spring:
     datasource:
         name: test
-        url: jdbc:mysql://118.31.57.194:3306/springboot?useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+        url: jdbc:mysql://localhost:3306/springboot?useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
         username: root
-        password: 123456
+        password: root
         type: com.alibaba.druid.pool.DruidDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
         initialSize: 5
@@ -37,7 +37,7 @@ spring:
           max-idle: 8
           min-idle: 0
           max-wait: -1ms
-      database: 1
+      database: 2
     jpa:
       database: mysql
       show-sql: true
@@ -50,6 +50,13 @@ spring:
 mybatis:
   mapper-locations: classpath:mapping/*.xml
   type-aliases-package: com.wjx.sjsr.model
+  configuration:
+    # 使用jdbc的getGeneratedKeys 可以获取数据库自增主键值
+    use-generated-keys: true
+    # 使用列别名替换列名，默认true。如：select name as title from table
+    use-column-label: true
+    # 开启驼峰命名转换，如：Table(create_time) -> Entity(createTime)。不需要我们关心怎么进行字段匹配，mybatis会自动识别`大写字母与下划线`
+    map-underscore-to-camel-case: true
 
 #pagehelper分页插件
 pagehelper:

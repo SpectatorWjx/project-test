@@ -1,5 +1,6 @@
 package com.wjx.sjsr.service.test;
 
+import com.wjx.sjsr.common.vo.Result;
 import com.wjx.sjsr.entity.test.TestSearchEntity;
 import com.wjx.sjsr.service.jpa_abstract.AbstractService;
 
@@ -25,4 +26,11 @@ public interface TestSearchService extends AbstractService<TestSearchEntity> {
      * @return
      */
     List<TestSearchEntity> findBySearchKeyWord(String kw);
+
+    /**
+     * 更新，测试事务回滚
+     * @param id
+     * @return
+     */
+    Result updateById(String id);
 }
