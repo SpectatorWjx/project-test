@@ -27,7 +27,7 @@ import static com.upyun.CompressHandler.Params.BUCKET_NAME;
 @Service
 public class TestUpYunServiceImpl implements TestUpYunService{
 
-    private static String upyunUrl = "upyun.delpast.com";
+    private static String upyunUrl = "http://upyun.delpast.com";
     private static String filePath = "/uploads/";
 
     private static String bucket_name = "delpast-image";

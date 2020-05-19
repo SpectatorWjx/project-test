@@ -20,7 +20,7 @@ public class AliYunSmsUtil {
 
     static final String domain = "dysmsapi.aliyuncs.com";
 
-    static final String accessKeyId = "LTAI4FrfGhtidPykj1Y51LWp";
+    static final String accessKeyId = "";
 
     static final String accessKeySecret = "D8hERsnNdIXQ5HHFtUBiC9NCYywPLT";
 
