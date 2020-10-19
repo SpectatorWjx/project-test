@@ -22,7 +22,7 @@ public class AliYunSmsUtil {
 
     static final String accessKeyId = "";
 
-    static final String accessKeySecret = "D8hERsnNdIXQ5HHFtUBiC9NCYywPLT";
+    static final String accessKeySecret = "";
 
     static final String regionId = "cn-hangzhou";
 
