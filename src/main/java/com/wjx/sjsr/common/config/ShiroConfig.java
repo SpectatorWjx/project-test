@@ -68,6 +68,7 @@ public class ShiroConfig {
 
         // test
         filterChainDefinitionMap.put("/test/*", "anon");
+        filterChainDefinitionMap.put("/music/**", "anon");
 
         //此处需要添加一个kickout，上面添加的自定义拦截器才能生效
         filterChainDefinitionMap.put("/**", "authc,kickout");
